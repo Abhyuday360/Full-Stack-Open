@@ -1,12 +1,10 @@
 import { useState } from 'react'
 
-
 const Button = (props) => (
   <button onClick={props.onClick}>
     {props.text}
   </button>
 )
-
 
 const App = () => {
   const anecdotes = [
@@ -19,16 +17,34 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
-  const [selected, setSelected] = useState(0)
 
-  const random = () => Math.floor(Math.random()*anecdotes.length)
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
+
+  const random = () => Math.floor(Math.random() * anecdotes.length)
+
+  const vote = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
+  }
+
+  const mostVotes = Math.max(...votes)
+  const mostVoted = votes.indexOf(mostVotes)
 
   return (
     <div>
       {anecdotes[selected]}
       <br />
-      <Button onClick={()=>setSelected(random)} text="Next anecdote"/>
+      <p>has {votes[selected]} votes</p>
+      <br />
+
+      <Button onClick={() => setSelected(random)} text="Next anecdote" />
+      <Button onClick={vote} text="Vote" />
+
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[mostVoted]}</p>
+      <p>has {mostVotes} votes</p>
     </div>
   )
 }
